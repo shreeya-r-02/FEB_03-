@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maran 💘 Valentine</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: linear-gradient(135deg, #ff5f8f, #ff9671);
+  font-family: system-ui, -apple-system;
+  overflow:hidden;
+}
+
+.card{
+  background:#fff;
+  width:92%;
+  max-width:390px;
+  padding:22px;
+  border-radius:26px;
+  text-align:center;
+  box-shadow:0 25px 45px rgba(0,0,0,0.25);
+  animation: pop 0.6s ease;
+}
+
+img{
+  width:100%;
+  border-radius:18px;
+  margin-bottom:16px;
+}
+
+h1{
+  color:#ff2f6d;
+  font-size:1.9rem;
+  line-height:1.3;
+}
+
+p{
+  color:#555;
+  margin:14px 0 26px;
+  font-size:1.05rem;
+  min-height:48px;
+}
+
+.buttons{
+  position:relative;
+  height:150px;
+}
+
+button{
+  border:none;
+  border-radius:50px;
+  padding:14px 28px;
+  font-size:1rem;
+  cursor:pointer;
+  transition: all 0.25s ease;
+}
+
+#yes{
+  background:#ff2f6d;
+  color:#fff;
+  box-shadow:0 10px 28px rgba(255,47,109,0.45);
+  animation:pulse 1.3s infinite;
+}
+
+#no{
+  background:#f2f2f2;
+  color:#555;
+  position:absolute;
+  left:160px;
+  top:20px;
+}
+
+@keyframes pop{
+  from{transform:scale(0.8);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+  100%{transform:scale(1)}
+}
+
+.heart{
+  position:fixed;
+  font-size:22px;
+  animation: float 3s linear forwards;
+}
+
+@keyframes float{
+  from{transform:translateY(0);opacity:1}
+  to{transform:translateY(-220px);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+  <img src="couple.jpg" alt="Cute moment">
+
+  <h1>Maran, will you be my Valentine? 💘</h1>
+  <p id="message">Correct answer already theriyum 😌</p>
+
+  <div class="buttons">
+    <button id="yes">YES 💖</button>
+    <button id="no">NO 🙈</button>
+  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const msg = document.getElementById("message");
+const card = document.getElementById("card");
+
+let yesScale = 1;
+let noScale = 1;
+let attempts = 0;
+
+const tamilTexts = [
+  "First of all edhuku yosikra? 😌",
+  "Idhula yosika enna iruku 🙄",
+  "NO option summa show ku dhan 😏",
+  "Seri seri drama podadha",
+  "Maran pls cooperate 😂",
+  "Ayyo ipdi panradhu romba over ah",
+  "Innum yosikriya? brave move 👀",
+  "YES press panna prize iruku 😌",
+  "Last warning… illa joke dhan 😈",
+  "Okay enough, now YES 😤❤️"
+];
+
+function moveNo(){
+  const x = Math.random()*260 - 130;
+  const y = Math.random()*160 - 80;
+
+  noBtn.style.transform = `translate(${x}px, ${y}px) scale(${noScale})`;
+
+  yesScale += 0.18;
+  noScale -= 0.07;
+
+  yesBtn.style.transform = `scale(${yesScale})`;
+  noBtn.style.opacity = noScale;
+
+  msg.innerText = tamilTexts[attempts % tamilTexts.length];
+  attempts++;
+
+  if(noScale < 0.3){
+    noBtn.innerText = "seri seri 😭";
+  }
+}
+
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+yesBtn.addEventListener("click", ()=>{
+  card.innerHTML = `
+    <h1>FINALLY 😤💘</h1>
+    <p>Maran said YES 🥹❤️</p>
+    <p>Screenshot eduthu marakkaadha 😌🌹</p>
+  `;
+  hearts();
+});
+
+function hearts(){
+  for(let i=0;i<35;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.innerText="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom="0";
+    h.style.animationDuration=2+Math.random()*2+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),3000);
+  }
+}
+</script>
+
+</body>
+</html>
