@@ -30,12 +30,6 @@ body{
   padding:22px;
   text-align:center;
   box-shadow:0 30px 60px rgba(0,0,0,.18);
-  animation: pop 0.6s ease;
-}
-
-@keyframes pop{
-  from{transform:scale(.9);opacity:0}
-  to{transform:scale(1);opacity:1}
 }
 
 img{
@@ -47,49 +41,48 @@ img{
 h1{
   font-size:1.7rem;
   color:#ff4d6d;
-  margin-bottom:6px;
 }
 
 p{
   color:#666;
   font-size:1.05rem;
-  min-height:48px;
+  min-height:50px;
 }
 
-.area{
-  position:relative;
-  height:160px;
-  margin-top:10px;
+/* Button layout */
+.buttons{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-top:15px;
+  align-items:center;
 }
 
 button{
+  width:80%;
+  max-width:250px;
   border:none;
   border-radius:32px;
-  padding:14px 30px;
-  font-size:1rem;
+  padding:14px;
+  font-size:1.1rem;
   cursor:pointer;
   transition:0.25s ease;
 }
 
 #yes{
   background:#ff4d6d;
-  color:#fff;
-  box-shadow:0 10px 24px rgba(255,77,109,.35);
-
-  /* ✅ Disabled initially */
+  color:white;
   opacity:0.5;
-  pointer-events:none;
+  pointer-events:none; /* disabled */
 }
 
 #no{
   background:#f4f4f4;
-  color:#555;
-  position:absolute;
-  left:180px;
-  top:40px;
+  color:#444;
+  position:relative;
 }
 
-/* floating sparkles */
+/* Sparkles */
 .sparkle{
   position:fixed;
   font-size:18px;
@@ -108,11 +101,11 @@ button{
 <div class="card" id="card">
   <img src="IMG_5766.jpeg" alt="💛">
 
-  <h1>Will you be my Valentine? 🤍</h1>
+  <h1>Maran, will you be my Valentine? 🤍</h1>
 
-  <p id="text">Just tap what feels right ✨</p>
+  <p id="text">Tap NO if you dare 😌</p>
 
-  <div class="area">
+  <div class="buttons">
     <button id="yes">YES 💖</button>
     <button id="no">NO 🙃</button>
   </div>
@@ -125,10 +118,8 @@ const text = document.getElementById("text");
 const card = document.getElementById("card");
 
 let yesSize = 1;
-let noFade = 1;
 let i = 0;
 
-/* 🔁 Your Tamil playful prompts */
 const lines = [
   "No sollriya 🙂",
   "Angel ku no solriya 😌",
@@ -142,59 +133,49 @@ const lines = [
 ];
 
 function dodge(){
-
-  // Move NO randomly
-  const x = Math.random()*260 - 130;
-  const y = Math.random()*160 - 80;
-  no.style.transform = `translate(${x}px,${y}px) scale(${noFade})`;
-
-  // YES grows slowly
-  yesSize += 0.12;
-  yes.style.transform = `scale(${yesSize})`;
-
-  // NO fades slowly
-  noFade -= 0.06;
-  no.style.opacity = noFade;
-
-  // Show current prompt
+  // Show prompt
   text.innerText = lines[i];
 
-  /* ✅ Unlock YES ONLY after LAST prompt appears */
+  // YES grows slowly
+  yesSize += 0.10;
+  yes.style.transform = `scale(${yesSize})`;
+
+  // Move NO sideways (safe for mobile)
+  const moveX = Math.random()*120 - 60;
+  const moveY = Math.random()*60 - 30;
+  no.style.transform = `translate(${moveX}px, ${moveY}px)`;
+
+  // Unlock YES only at last line
   if(i === lines.length - 1){
     yes.style.pointerEvents = "auto";
     yes.style.opacity = "1";
     yes.innerText = "YES 💖 (now!)";
   }
 
-  // Stop increasing after last prompt
   if(i < lines.length - 1){
     i++;
   }
 }
 
-// NO dodges forever
-no.addEventListener("mouseover", dodge);
 no.addEventListener("touchstart", dodge);
+no.addEventListener("mouseover", dodge);
 
-// YES click ending
 yes.addEventListener("click", ()=>{
   card.innerHTML = `
     <h1>💖</h1>
-    <p>That was easy 😌</p>
+    <p>Hehe I knew it 😌</p>
     <p>Happy Valentine’s Day ✨</p>
   `;
   celebrate();
 });
 
-// Sparkle celebration
 function celebrate(){
-  for(let i=0;i<30;i++){
+  for(let i=0;i<25;i++){
     const s = document.createElement("div");
     s.className = "sparkle";
     s.innerText = ["💖","✨","🤍"][Math.floor(Math.random()*3)];
     s.style.left = Math.random()*100 + "vw";
     s.style.bottom = "0";
-    s.style.animationDuration = 2 + Math.random()*2 + "s";
     document.body.appendChild(s);
     setTimeout(()=>s.remove(),3000);
   }
